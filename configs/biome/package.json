@@ -1,0 +1,11 @@
+{
+  "name": "@synapse/biome",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./biome.json"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.6"
+  }
+}
