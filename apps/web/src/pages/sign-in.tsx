@@ -28,7 +28,7 @@ export function SignIn() {
             <Input name="password" type="password" id="password" />
 
             <Link
-              to="forgot-password"
+              to="/forgot-password"
               className="text-xs font-medium text-foreground hover:underline"
             >
               Esqueceu sua senha?
@@ -42,7 +42,7 @@ export function SignIn() {
 
             <span className="flex gap-1 text-xs font-medium text-muted-foreground">
               Ainda não possui uma conta?
-              <Link to="sign-up" className="text-foreground hover:underline">
+              <Link to="/sign-up" className="text-foreground hover:underline">
                 Registre-se
               </Link>
             </span>
