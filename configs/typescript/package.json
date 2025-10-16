@@ -2,6 +2,7 @@
   "name": "@synapse/typescript",
   "private": true,
   "files": [
-    "node.json"
+    "node.json",
+    "react.json"
   ]
 }
