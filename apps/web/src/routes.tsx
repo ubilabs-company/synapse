@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router'
+import { AppLayout } from './layouts/app'
 import { AuthLayout } from './layouts/auth'
 import { NotFound } from './pages/404'
 import { Chat } from './pages/chat'
@@ -9,9 +10,10 @@ import { SignUp } from './pages/sign-up'
 export function Router() {
   return (
     <Routes>
-      {/* <Route element={<AppLayout />} errorElement={<ErrorBoundary />}>
+      {/* <Route element={<AppLayout />} errorElement={<ErrorBoundary />}> */}
+      <Route element={<AppLayout />}>
         <Route index element={<Chat />} />
-      </Route> */}
+      </Route>
 
       <Route element={<AuthLayout />}>
         <Route path="/sign-in" element={<SignIn />} />
