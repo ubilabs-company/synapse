@@ -6,8 +6,8 @@ export function AppLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="flex flex-col flex-1">
-        <SidebarTrigger className="fixed z-1" />
+      <main className="relative flex flex-col flex-1 max-h-screen">
+        <SidebarTrigger className="p-4 m-2 fixed z-1" />
         <Outlet />
       </main>
     </SidebarProvider>
