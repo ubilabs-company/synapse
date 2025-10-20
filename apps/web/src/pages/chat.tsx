@@ -1,25 +1,31 @@
-import { Send } from 'lucide-react'
+import { Send, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { Response } from '@/components/shadcn-io/ai/response'
+import { useParams } from 'react-router'
+import { Message } from '@/components/ai/message'
+import { Response } from '@/components/ai/response'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
-const initialMessages = [
+const initialMessages: {
+  id: number
+  message: string
+  role: 'assistant' | 'user'
+}[] = [
   {
     id: 1,
     message: 'Hello!',
-    isMe: true,
+    role: 'user',
   },
   {
     id: 2,
     message: '**Hi there.** I am an AI model designed to help you.',
-    isMe: false,
+    role: 'assistant',
   },
   {
     id: 3,
     message: 'Can you show me some JavaScript code?',
-    isMe: true,
+    role: 'user',
   },
   {
     id: 4,
@@ -30,12 +36,12 @@ const greeting = "Hello, world!";
 console.log(greeting);
 \`\`\`
 `,
-    isMe: false,
+    role: 'assistant',
   },
   {
     id: 5,
     message: 'Give me some markdown',
-    isMe: true,
+    role: 'user',
   },
   {
     id: 6,
@@ -58,62 +64,65 @@ console.log(greeting);
 1.  First step: Prepare the ingredients.
 2.  Second step: Mix them thoroughly.
 3.  Third step: Bake for 30 minutes.`,
-    isMe: false,
+    role: 'assistant',
   },
   {
     id: 7,
     message: 'What more can you do?',
-    isMe: true,
+    role: 'user',
   },
 ]
 export function Chat() {
   const [messages, setMessages] = useState(initialMessages)
   const [input, setInput] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
+  const { thread } = useParams<{ thread: string }>()
+
+  function scrollToBottom(smooth = true) {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({
+        behavior: smooth ? 'smooth' : 'auto',
+        block: 'end',
+        inline: 'nearest',
+      })
+    }
+  }
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
+    scrollToBottom()
+  }, [])
+
+  useEffect(() => {
+    scrollToBottom()
   }, [messages])
 
-  const sendMessage = () => {
+  function sendMessage() {
     if (input.trim()) {
       const newMessage = {
         id: messages.length + 1,
-        user: 'You',
+        role: 'user' as 'user' | 'assistant',
         message: input,
-        time: new Date().toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        isMe: true,
       }
       setMessages([...messages, newMessage])
       setInput('')
     }
   }
+
   return (
     <>
-      <ScrollArea className="flex-1 overflow-auto" ref={scrollRef}>
-        <div className="px-4 mx-auto max-w-[64rem] py-4 space-y-4">
+      <ScrollArea className="flex-1 overflow-auto">
+        <div
+          className="px-4 mx-auto max-w-[64rem] py-4 space-y-4"
+          ref={scrollRef}
+        >
           {messages.map(msg =>
-            msg.isMe ? (
-              <div key={msg.id} className={'flex gap-3 flex-row-reverse'}>
-                <div className={'flex flex-col gap-1 items-end'}>
-                  <div
-                    className={`rounded-lg px-3 py-2 max-w-[250px] ${
-                      msg.isMe
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
-                    }`}
-                  >
-                    <p className="text-base">{msg.message}</p>
-                  </div>
-                </div>
-              </div>
+            msg.role === 'user' ? (
+              <Message key={msg.id} message={msg.message}></Message>
             ) : (
-              <Response key={msg.id}>{msg.message}</Response>
+              <div className="flex flex-col sm:flex-row gap-4" key={msg.id}>
+                <Sparkles />
+                <Response key={msg.id}>{msg.message}</Response>
+              </div>
             ),
           )}
         </div>
@@ -128,11 +137,11 @@ export function Chat() {
         <Input
           value={input}
           onChange={e => setInput(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1"
+          placeholder="Digite sua pergunta aqui..."
+          className="!text-base p-4.75 flex-1"
         />
-        <Button type="submit" size="icon">
-          <Send className="h-4 w-4" />
+        <Button type="submit" size="icon-lg">
+          <Send className="size-5" />
         </Button>
       </form>
     </>

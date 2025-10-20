@@ -10,9 +10,12 @@ import { SignUp } from './pages/sign-up'
 export function Router() {
   return (
     <Routes>
-      {/* <Route element={<AppLayout />} errorElement={<ErrorBoundary />}> */}
-      <Route element={<AppLayout />}>
+      {/* <Route element={<AppLayout />} errorElement={<ErrorBoundary />}>
         <Route index element={<Chat />} />
+      </Route> */}
+      <Route path="/chat" element={<AppLayout />}>
+        <Route index element={<Chat />} />
+        <Route path=":thread" element={<Chat />} />
       </Route>
 
       <Route element={<AuthLayout />}>
