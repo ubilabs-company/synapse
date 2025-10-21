@@ -1,7 +1,19 @@
 import { Brain } from 'lucide-react'
-import { Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { isAuthenticated } from '@/utils/auth'
 
 export function AuthLayout() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log('?')
+    if (isAuthenticated()) {
+      console.log('???')
+      navigate('/chat')
+    }
+  }, [navigate])
+
   return (
     <div className="min-h-screen grid grid-cols-2">
       <div className="h-full border-r border-foreground/5 bg-muted p-10 text-muted-foreground flex flex-col justify-between">

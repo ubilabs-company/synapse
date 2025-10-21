@@ -1,15 +1,23 @@
-import { Outlet, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, useNavigate, useParams } from 'react-router-dom'
 import { AppSidebar } from '@/components/app-sidebar'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { isAuthenticated } from '@/utils/auth'
 
 export function AppLayout() {
+  const navigate = useNavigate()
   const { thread } = useParams<{ thread: string }>()
-  console.log(thread)
 
   if (!thread) {
     console.log('Thread is empty.')
   }
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate('/sign-in')
+    }
+  }, [navigate])
 
   return (
     <ThemeProvider>
