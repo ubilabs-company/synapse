@@ -1,10 +1,11 @@
 import { relations, sql } from 'drizzle-orm'
-import { pgTable, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 import { messages } from './messages'
 import { users } from './users'
 
 export const threads = pgTable('threads', {
   id: uuid('id').primaryKey().defaultRandom(),
+  title: text().notNull(),
   ownerId: uuid('owner_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),

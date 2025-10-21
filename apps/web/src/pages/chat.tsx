@@ -76,7 +76,6 @@ export function Chat() {
   const [messages, setMessages] = useState(initialMessages)
   const [input, setInput] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { thread } = useParams<{ thread: string }>()
 
   function scrollToBottom(smooth = true) {
     if (scrollRef.current) {

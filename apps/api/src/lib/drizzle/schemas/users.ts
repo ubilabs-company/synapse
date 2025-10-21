@@ -4,7 +4,8 @@ import { threads } from './threads'
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
-  username: text().notNull(),
+  firstName: text('first_name').notNull(),
+  lastName: text('last_name').notNull(),
   email: text().unique(),
   passwordHash: text('password_hash'),
   avatarUrl: text('avatar_url'),

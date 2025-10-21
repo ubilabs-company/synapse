@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm'
 import type { FastifyZodInstance } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
 import { db, tables } from '@/lib/drizzle'
+import { auth } from '@/middleware/auth'
 import {
   BadRequestError,
   NotFoundError,
@@ -9,7 +10,7 @@ import {
 } from '@/utils/errors'
 
 export default async function getProfile(app: FastifyZodInstance) {
-  app.get('/users', {
+  app.register(auth).get('/users', {
     schema: {
       tags: ['Auth'],
       summary: 'Get authenticated user profile.',
@@ -18,8 +19,9 @@ export default async function getProfile(app: FastifyZodInstance) {
       response: {
         200: z.object({
           user: z.object({
-            id: z.string().uuid(),
-            username: z.string().nullable().meta({ example: 'John Doe' }),
+            id: z.uuid(),
+            firstName: z.string().meta({ example: 'John' }),
+            lastName: z.string().meta({ example: 'Doe' }),
             email: z
               .string()
               .nullable()
@@ -38,7 +40,8 @@ export default async function getProfile(app: FastifyZodInstance) {
       const user = await db.query.users.findFirst({
         columns: {
           id: true,
-          username: true,
+          firstName: true,
+          lastName: true,
           email: true,
           avatarUrl: true,
         },

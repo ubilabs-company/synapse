@@ -11,6 +11,8 @@ const envSchema = z.object({
   JWT_SECRET: z.string(),
   JWT_TOKEN_EXPIRE_IN_DAYS: z.coerce.number(),
 
+  OPENAI_API_KEY: z.string(),
+
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   DB_HOST: z.string(),

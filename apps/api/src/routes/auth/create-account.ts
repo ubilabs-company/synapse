@@ -13,7 +13,8 @@ export default async function createAccount(app: FastifyZodInstance) {
       summary: 'Create a new account.',
       operationId: 'createNewAccount',
       body: z.object({
-        username: z.string().meta({ example: 'John Doe' }),
+        firstName: z.string().meta({ example: 'John' }),
+        lastName: z.string().meta({ example: 'Doe' }),
         email: z.email().meta({ example: 'john.doe@example.com' }),
         password: z.string().min(6).meta({ example: '123456' }),
       }),
@@ -24,7 +25,7 @@ export default async function createAccount(app: FastifyZodInstance) {
       },
     },
     handler: async (request, reply) => {
-      const { username, email, password } = request.body
+      const { firstName, lastName, email, password } = request.body
 
       const userWithSameEmail = await db.query.users.findFirst({
         where: eq(tables.users.email, email),
@@ -36,7 +37,9 @@ export default async function createAccount(app: FastifyZodInstance) {
 
       const passwordHash = await hash(password, env.SALT_ROUNDS)
 
-      await db.insert(tables.users).values({ username, email, passwordHash })
+      await db
+        .insert(tables.users)
+        .values({ firstName, lastName, email, passwordHash })
 
       return reply.status(201).send()
     },
